@@ -1,0 +1,162 @@
+{
+  "identity": {
+    "name": "E1",
+    "persona": "The Anti-AI Designer",
+    "principles": [
+      "Fusion over Imitation",
+      "Emotion First",
+      "Content is King",
+      "Zoom In",
+      "Negative Space",
+      "Contrast"
+    ]
+  },
+  "visual_identity": {
+    "theme_mode": "light",
+    "colors": {
+      "primary": "#0052CC",
+      "primary_foreground": "#FFFFFF",
+      "secondary": "#E6F0FF",
+      "secondary_foreground": "#0052CC",
+      "accent": "#00C2FF",
+      "accent_foreground": "#003366",
+      "background": "#FFFFFF",
+      "surface": "#F8FAFC",
+      "surface_secondary": "#F1F5F9",
+      "text_main": "#0F172A",
+      "text_muted": "#64748B",
+      "border": "#E2E8F0",
+      "success": "#10B981",
+      "warning": "#F59E0B",
+      "error": "#EF4444"
+    },
+    "typography": {
+      "headings": {
+        "family": "Manrope, sans-serif",
+        "weights": ["600", "700", "800"],
+        "tracking": "-0.02em"
+      },
+      "body": {
+        "family": "Inter, sans-serif",
+        "weights": ["400", "500"],
+        "tracking": "0"
+      },
+      "mono": {
+        "family": "JetBrains Mono, monospace"
+      }
+    },
+    "radius": {
+      "default": "0.25rem",
+      "button": "0.125rem",
+      "card": "0.25rem",
+      "input": "0.25rem"
+    },
+    "shadows": {
+      "subtle": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      "card": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+      "hover": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+      "glow": "0 0 15px rgba(0, 82, 204, 0.15)"
+    }
+  },
+  "layout_strategy": {
+    "container": {
+      "max_width": "1400px",
+      "padding_x": "2rem"
+    },
+    "spacing": {
+      "section_gap": "6rem",
+      "component_gap": "2rem",
+      "element_gap": "1rem"
+    },
+    "grids": {
+      "bento": "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6",
+      "product_list": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8",
+      "features": "grid grid-cols-1 md:grid-cols-3 gap-12"
+    }
+  },
+  "components": {
+    "buttons": {
+      "base": "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+      "variants": {
+        "default": "bg-primary text-primary-foreground hover:bg-primary/90 rounded-[2px] h-11 px-8 shadow-sm",
+        "outline": "border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8 rounded-[2px]",
+        "ghost": "hover:bg-accent hover:text-accent-foreground h-11 px-4 rounded-[2px]",
+        "link": "text-primary underline-offset-4 hover:underline h-auto p-0"
+      }
+    },
+    "cards": {
+      "product": "group relative flex flex-col overflow-hidden bg-white border border-border hover:border-primary/50 transition-colors duration-300",
+      "feature": "bg-surface p-8 border border-transparent hover:border-border transition-all duration-300"
+    },
+    "inputs": {
+      "default": "flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+    }
+  },
+  "pages": {
+    "home": {
+      "sections": [
+        "Hero: Full width, clean water background, bold typography 'Industrial Grade Water Solutions'",
+        "Categories: Bento grid (Pumps, Tanks, Tools, Accessories)",
+        "Tools Teaser: Split section 'Find your Pump' vs 'Size your Tank'",
+        "Featured Products: Carousel or grid of top sellers",
+        "Trust Signals: 'South African Tough' badge, Certification icons"
+      ]
+    },
+    "shop": {
+      "layout": "Sidebar filters (left) + Product Grid (right)",
+      "features": ["Faceted search", "Sort by price/name", "Quick view"]
+    },
+    "product_detail": {
+      "layout": "Two column (Images Left, Info Right)",
+      "features": ["Lightbox gallery", "Technical Specs Table", "Add to Quote", "Related Products"]
+    },
+    "tools": {
+      "pump_finder": "Step-by-step wizard or Single page calculator. Inputs: Flow Rate, Head. Output: Recommended Products.",
+      "tank_sizing": "Calculator. Inputs: Users, Days backup. Output: Litres required + Tank suggestions."
+    },
+    "cart": {
+      "type": "Quote Request",
+      "elements": ["List of items", "Request Quote Form", "No payment gateway"]
+    }
+  },
+  "assets": {
+    "images": [
+      {
+        "category": "hero_bg",
+        "url": "https://images.unsplash.com/photo-1761446077088-3582d941b196",
+        "alt": "Clean flowing water texture"
+      },
+      {
+        "category": "industrial_pump",
+        "url": "https://images.pexels.com/photos/9900030/pexels-photo-9900030.jpeg",
+        "alt": "Industrial pump system"
+      },
+      {
+        "category": "water_tank",
+        "url": "https://images.unsplash.com/photo-1764675902777-6c0c0ac16f61",
+        "alt": "Industrial water tanks"
+      }
+    ],
+    "icons": {
+      "library": "lucide-react",
+      "preferred": ["Droplets", "Activity", "Ruler", "Settings", "Truck", "ShieldCheck"]
+    }
+  },
+  "instructions_to_main_agent": [
+    "Install 'lucide-react' and 'framer-motion' if not present.",
+    "Use 'Manrope' from Google Fonts for all headings. Import in index.css.",
+    "Implement the 'Quote Request' flow: Cart items are saved to a context/state, then submitted via a form. No Stripe/Payment.",
+    "Mock Data: specific pump models (e.g., 'Grundfos', 'DAB', 'Pascali') and tank sizes (e.g., '2500L', '5000L', '10000L') with ZAR pricing.",
+    "Ensure 'Pump Finder' and 'Tank Sizing' are functional React components with math logic.",
+    "Use the 'shadcn/ui' components found in /app/frontend/src/components/ui but customize their styles via tailwind classes to match the 'Industrial Clean' look (sharper corners, distinct borders).",
+    "For the Hero section, use the provided water texture image with a dark/blue overlay to ensure text readability.",
+    "Authentication: Implement JWT login/register screens using simple forms. Store token in localStorage."
+  ],
+  "universal_guidelines": [
+    "Do not use gradients for main backgrounds, use solid white or very light gray.",
+    "Use high contrast for text. Black on White, White on Blue.",
+    "Add 'data-testid' to all interactive elements.",
+    "Responsive design is critical - check mobile view for tables and grids.",
+    "Use 'sonner' for all notifications (e.g., 'Added to Quote')."
+  ]
+}
