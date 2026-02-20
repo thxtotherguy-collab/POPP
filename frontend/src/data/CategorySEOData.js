@@ -67,7 +67,7 @@ const CATEGORY_SEO = {
       points: [
         'Know your borehole diameter — 3" pumps fit narrow holes, 4" and 6" suit larger casings',
         'Check the static water level and drawdown to calculate total dynamic head',
-        'Match the pump yield (L/min) to your borehole's tested yield — never exceed it',
+        'Match the pump yield (L/min) to your borehole tested yield — never exceed it',
         'For remote sites without Eskom power, consider a solar-compatible system like the Grundfos SQFlex',
         'Include a borehole cable, control box, and non-return valve in your planning',
       ],
