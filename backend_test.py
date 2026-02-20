@@ -269,6 +269,35 @@ class PoppPumpsAPITester:
             return False, data
         return success, data
 
+    def test_consultation_creation(self):
+        """Test consultation creation endpoint"""
+        consultation_data = {
+            "full_name": "Test Engineer",
+            "company": "Test Engineering Co",
+            "phone": "+27123456789",
+            "email": "engineer@test.com",
+            "location": "Cape Town, Western Cape",
+            "application_type": "commercial",
+            "installation_type": "new",
+            "flow_rate": "120 L/min",
+            "pressure_head": "45m",
+            "power_supply": "three_phase",
+            "water_source": "borehole",
+            "pipe_size": "2 inch",
+            "budget": "R50,000 - R100,000",
+            "timeline": "short",
+            "description": "Need pump system for commercial building water supply from borehole. Building has 3 floors with 20 outlets total. Distance from borehole to building is approximately 150m with 15m elevation difference."
+        }
+        
+        success, data = self.run_test("Create Consultation", "POST", "consultations", 200, consultation_data)
+        if success and data.get('id') and data.get('status') == 'pending':
+            self.log_result("Consultation Creation Data Validation", True, f"Consultation created with ID: {data['id']}")
+            return True, data
+        elif success:
+            self.log_result("Consultation Creation Data Validation", False, "Missing consultation ID or incorrect status")
+            return False, data
+        return success, data
+
     def print_summary(self):
         """Print test summary"""
         print(f"\n" + "="*60)
