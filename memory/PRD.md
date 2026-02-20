@@ -43,6 +43,22 @@ Redesign the POPP website (popp.co.za) using its clean style and branding, with 
 - [x] Sonner toasts for all actions
 - [x] Design: Manrope + DM Sans typography, #0052CC primary, clean industrial aesthetic
 
+### Category Page Optimization (Feb 2026)
+- [x] Professional SEO category headers (200-300 word original intros per category)
+- [x] Application tags per category (e.g. "Residential pressure boosting", "Farm water supply")
+- [x] Related categories internal linking
+- [x] Advanced sidebar filters: Category, Brand, Price Range slider, Power (kW), Flow Rate
+- [x] Collapsible filter sections with mobile-friendly overlay
+- [x] Product cards: stock status badges, key spec pills, quick-view button, compare checkbox
+- [x] Quick-view modal with image, specs, pricing, add to quote, view full details
+- [x] Product comparison bar (bottom sticky, up to 4 products)
+- [x] Buying guide panels per category (numbered tips + CTA link to tools)
+- [x] Trust elements bar (SA delivery, warranty, returns, expert help CTA)
+- [x] Category-specific FAQ accordions (3-5 original SEO questions per category)
+- [x] Sticky mobile filter button
+- [x] Lazy loading images
+- [x] SEO-optimized H1/H2 structure per category
+
 ## Test Results
 - Backend: 97% pass | Frontend: 95% pass | Overall: 96% pass
 
