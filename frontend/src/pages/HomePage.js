@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Activity, Settings, Droplets, ShieldCheck, Truck, Zap } from 'lucide-react';
+import { ArrowRight, Activity, Settings, Droplets, ShieldCheck, Truck, Zap, Container } from 'lucide-react';
 import axios from 'axios';
 import { Button } from '../components/ui/button';
 import ProductCard from '../components/ProductCard';
@@ -13,7 +13,7 @@ const categoryData = [
   { name: 'Booster Pumps', slug: 'booster-pumps', icon: Zap, desc: 'Home & commercial pressure systems' },
   { name: 'Submersible Pumps', slug: 'submersible-pumps', icon: Droplets, desc: 'Wells, boreholes & drainage' },
   { name: 'Borehole Pumps', slug: 'borehole-pumps', icon: Activity, desc: 'Deep well pump solutions' },
-  { name: 'Water Tanks', slug: 'water-tanks', icon: Ruler, desc: 'Storage & rainwater harvesting' },
+  { name: 'Water Tanks', slug: 'water-tanks', icon: Container, desc: 'Storage & rainwater harvesting' },
 ];
 
 export default function HomePage() {
