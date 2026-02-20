@@ -42,7 +42,7 @@ export default function Footer() {
               {[
                 { label: 'Shop All', path: '/shop' },
                 { label: 'Pump Finder Tool', path: '/pump-finder' },
-                { label: 'Tank Sizing Tool', path: '/tank-sizing' },
+                { label: 'System Consultation', path: '/consultation' },
                 { label: 'Request a Quote', path: '/cart' },
                 { label: 'About Us', path: '/about' },
                 { label: 'Contact', path: '/contact' },

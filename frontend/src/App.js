@@ -11,6 +11,7 @@ import ShopPage from "./pages/ShopPage";
 import ProductPage from "./pages/ProductPage";
 import PumpFinderPage from "./pages/PumpFinderPage";
 import TankSizingPage from "./pages/TankSizingPage";
+import ConsultationPage from "./pages/ConsultationPage";
 import CartPage from "./pages/CartPage";
 import AuthPage from "./pages/AuthPage";
 import ContactPage from "./pages/ContactPage";
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/product/:id" element={<ProductPage />} />
                 <Route path="/pump-finder" element={<PumpFinderPage />} />
                 <Route path="/tank-sizing" element={<TankSizingPage />} />
+                <Route path="/consultation" element={<ConsultationPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/contact" element={<ContactPage />} />

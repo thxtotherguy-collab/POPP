@@ -72,6 +72,23 @@ class CategoryResponse(BaseModel):
     image: str
     product_count: int = 0
 
+class ConsultationCreate(BaseModel):
+    full_name: str
+    company: Optional[str] = None
+    phone: str
+    email: str
+    location: Optional[str] = None
+    application_type: Optional[str] = None
+    installation_type: Optional[str] = None
+    flow_rate: Optional[str] = None
+    pressure_head: Optional[str] = None
+    power_supply: Optional[str] = None
+    water_source: Optional[str] = None
+    pipe_size: Optional[str] = None
+    budget: Optional[str] = None
+    timeline: Optional[str] = None
+    description: Optional[str] = None
+
 class QuoteRequestCreate(BaseModel):
     name: str
     email: str
@@ -248,6 +265,34 @@ async def create_quote(data: QuoteRequestCreate):
     }
     await db.quotes.insert_one(quote_doc)
     return {"id": quote_id, "status": "pending", "message": "Quote request submitted successfully. We will contact you shortly."}
+
+# ─── Consultation Routes ───
+
+@api_router.post("/consultations")
+async def create_consultation(data: ConsultationCreate):
+    consult_id = str(uuid.uuid4())
+    consult_doc = {
+        "id": consult_id,
+        "full_name": data.full_name,
+        "company": data.company,
+        "phone": data.phone,
+        "email": data.email,
+        "location": data.location,
+        "application_type": data.application_type,
+        "installation_type": data.installation_type,
+        "flow_rate": data.flow_rate,
+        "pressure_head": data.pressure_head,
+        "power_supply": data.power_supply,
+        "water_source": data.water_source,
+        "pipe_size": data.pipe_size,
+        "budget": data.budget,
+        "timeline": data.timeline,
+        "description": data.description,
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.consultations.insert_one(consult_doc)
+    return {"id": consult_id, "status": "pending", "message": "Consultation request submitted. Our technical team will respond within 24-48 hours."}
 
 # ─── Seed Data ───
 

@@ -32,7 +32,7 @@ export default function Header() {
     { label: 'Home', path: '/' },
     { label: 'Shop', path: '/shop' },
     { label: 'Pump Finder', path: '/pump-finder' },
-    { label: 'Tank Sizing', path: '/tank-sizing' },
+    { label: 'Consultation', path: '/consultation' },
     { label: 'About', path: '/about' },
     { label: 'Contact', path: '/contact' },
   ];
