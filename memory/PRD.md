@@ -43,7 +43,16 @@ Redesign the POPP website (popp.co.za) using its clean style and branding, with 
 - [x] Sonner toasts for all actions
 - [x] Design: Manrope + DM Sans typography, #0052CC primary, clean industrial aesthetic
 
-### Category Page Optimization (Feb 2026)
+### Consultation Page Replacement (Feb 2026)
+- [x] Replaced "Tank Sizing" with "Pump & System Consultation" page
+- [x] 8-section professional layout: Hero, Authority, Audience Grid, Consultation Categories, Technical Form, Process Steps, FAQ, Closing CTA
+- [x] Extensive technical consultation form: contact info, application type, flow rate, pressure/head, power supply, water source, pipe size, budget, timeline, description
+- [x] Backend POST /api/consultations endpoint
+- [x] All nav, footer, homepage, and SEO data references updated
+- [x] FAQ accordion with 5 consultation-specific questions
+- [x] 5-step process visualization
+- [x] "Designed For" grid targeting 8 professional audiences
+- [x] 5 consultation categories with "Request Technical Advice" CTAs
 - [x] Professional SEO category headers (200-300 word original intros per category)
 - [x] Application tags per category (e.g. "Residential pressure boosting", "Farm water supply")
 - [x] Related categories internal linking
