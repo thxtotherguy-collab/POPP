@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Activity, Ruler, Droplets, ShieldCheck, Truck, Zap } from 'lucide-react';
+import { ArrowRight, Activity, Settings, Droplets, ShieldCheck, Truck, Zap } from 'lucide-react';
 import axios from 'axios';
 import { Button } from '../components/ui/button';
 import ProductCard from '../components/ProductCard';
@@ -162,12 +162,12 @@ export default function HomePage() {
                 Open Tool <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </span>
             </Link>
-            <Link to="/tank-sizing" className="group relative overflow-hidden bg-[hsl(222,47%,11%)] text-white p-10 rounded-sm hover:shadow-xl transition-shadow" data-testid="tank-sizing-card">
-              <Ruler className="h-12 w-12 mb-4 opacity-80" />
-              <h3 className="font-manrope font-bold text-2xl mb-2">Tank Sizing</h3>
-              <p className="text-white/80 mb-6 max-w-sm">Estimate litres needed for backup water based on your household size and usage patterns.</p>
+            <Link to="/consultation" className="group relative overflow-hidden bg-[hsl(222,47%,11%)] text-white p-10 rounded-sm hover:shadow-xl transition-shadow" data-testid="consultation-card">
+              <Settings className="h-12 w-12 mb-4 opacity-80" />
+              <h3 className="font-manrope font-bold text-2xl mb-2">System Consultation</h3>
+              <p className="text-white/80 mb-6 max-w-sm">Get expert guidance on pump selection, system design, borehole setups, and complete water solutions.</p>
               <span className="inline-flex items-center font-semibold text-sm">
-                Open Tool <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                Request Consultation <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </span>
             </Link>
           </div>
