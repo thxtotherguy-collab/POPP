@@ -336,6 +336,7 @@ def main():
     tester.test_user_login()
     tester.test_auth_me()
     tester.test_quote_creation()
+    tester.test_consultation_creation()
     
     # Print summary and return result
     all_passed = tester.print_summary()
