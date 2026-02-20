@@ -3,198 +3,204 @@
     "test": "Health Check",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:46.990015"
+    "timestamp": "2026-02-20T06:49:45.336633"
   },
   {
     "test": "Seed Data",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:47.141731"
+    "timestamp": "2026-02-20T06:49:45.444699"
   },
   {
     "test": "Get Categories",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:47.258677"
+    "timestamp": "2026-02-20T06:49:45.553608"
   },
   {
     "test": "Categories Data Validation",
     "passed": true,
     "details": "Found 6 categories",
-    "timestamp": "2026-02-19T12:24:47.259226"
+    "timestamp": "2026-02-20T06:49:45.554211"
   },
   {
     "test": "Get Brands",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:47.366774"
+    "timestamp": "2026-02-20T06:49:45.656904"
   },
   {
     "test": "Brands Data Validation",
     "passed": true,
     "details": "Found 6 brands",
-    "timestamp": "2026-02-19T12:24:47.367294"
+    "timestamp": "2026-02-20T06:49:45.657510"
   },
   {
     "test": "Get Products",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:47.472167"
+    "timestamp": "2026-02-20T06:49:45.809717"
   },
   {
     "test": "Products Data Validation",
     "passed": true,
     "details": "Found 19 products",
-    "timestamp": "2026-02-19T12:24:47.472748"
+    "timestamp": "2026-02-20T06:49:45.810396"
   },
   {
     "test": "Get Featured Products",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:47.579719"
+    "timestamp": "2026-02-20T06:49:45.932776"
   },
   {
     "test": "Featured Products Data Validation",
     "passed": true,
     "details": "Found 7 featured products",
-    "timestamp": "2026-02-19T12:24:47.580222"
+    "timestamp": "2026-02-20T06:49:45.933406"
   },
   {
     "test": "Products Category Filter",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:47.704805"
+    "timestamp": "2026-02-20T06:49:46.050193"
   },
   {
     "test": "Products Brand Filter",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:47.806829"
+    "timestamp": "2026-02-20T06:49:46.170361"
   },
   {
     "test": "Products Search Filter",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:47.952789"
+    "timestamp": "2026-02-20T06:49:46.274539"
   },
   {
     "test": "Products Sort Price Asc",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:48.099167"
+    "timestamp": "2026-02-20T06:49:46.375618"
   },
   {
     "test": "Products Sort Price Desc",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:48.204037"
+    "timestamp": "2026-02-20T06:49:46.482440"
   },
   {
     "test": "Products Sort Name Asc",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:48.310067"
+    "timestamp": "2026-02-20T06:49:46.593912"
   },
   {
     "test": "Products Sort Name Desc",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:48.440129"
+    "timestamp": "2026-02-20T06:49:46.725302"
   },
   {
     "test": "Get Products",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:48.534190"
+    "timestamp": "2026-02-20T06:49:46.867019"
   },
   {
     "test": "Products Data Validation",
     "passed": true,
     "details": "Found 19 products",
-    "timestamp": "2026-02-19T12:24:48.534814"
+    "timestamp": "2026-02-20T06:49:46.867756"
   },
   {
     "test": "Get Single Product",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:48.635600"
+    "timestamp": "2026-02-20T06:49:46.964612"
   },
   {
     "test": "Single Product Data Validation",
     "passed": true,
     "details": "Product ID matches: f4788efd-5773-4634-94d3-e2352d38a821",
-    "timestamp": "2026-02-19T12:24:48.636140"
+    "timestamp": "2026-02-20T06:49:46.965242"
   },
   {
     "test": "Get Products",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:48.763449"
+    "timestamp": "2026-02-20T06:49:47.086279"
   },
   {
     "test": "Products Data Validation",
     "passed": true,
     "details": "Found 19 products",
-    "timestamp": "2026-02-19T12:24:48.764123"
+    "timestamp": "2026-02-20T06:49:47.086960"
   },
   {
     "test": "Get Related Products",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:48.933854"
+    "timestamp": "2026-02-20T06:49:47.186104"
   },
   {
     "test": "Related Products Data Validation",
     "passed": true,
     "details": "Found 1 related products",
-    "timestamp": "2026-02-19T12:24:48.934466"
+    "timestamp": "2026-02-20T06:49:47.186679"
   },
   {
     "test": "User Registration",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:49.304288"
+    "timestamp": "2026-02-20T06:49:47.526269"
   },
   {
     "test": "Registration Data Validation",
     "passed": true,
-    "details": "User registered: test122448@popptest.com",
-    "timestamp": "2026-02-19T12:24:49.304915"
+    "details": "User registered: test064947@popptest.com",
+    "timestamp": "2026-02-20T06:49:47.526880"
   },
   {
     "test": "Pre-Login Registration",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:49.629239"
+    "timestamp": "2026-02-20T06:49:47.848371"
   },
   {
     "test": "User Login",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:49.948211"
+    "timestamp": "2026-02-20T06:49:48.172271"
   },
   {
     "test": "Login Data Validation",
     "passed": true,
-    "details": "User logged in: logintest122449login@popptest.com",
-    "timestamp": "2026-02-19T12:24:49.948830"
+    "details": "User logged in: logintest064947login@popptest.com",
+    "timestamp": "2026-02-20T06:49:48.172871"
   },
   {
     "test": "Get Current User",
-    "passed": false,
-    "details": "Status: 401, Expected: 200, Response: {'detail': 'Not authenticated'}",
-    "timestamp": "2026-02-19T12:24:50.065563"
+    "passed": true,
+    "details": "Status: 200, Expected: 200",
+    "timestamp": "2026-02-20T06:49:48.268859"
+  },
+  {
+    "test": "Auth Me Data Validation",
+    "passed": true,
+    "details": "Current user: test064947@popptest.com",
+    "timestamp": "2026-02-20T06:49:48.269437"
   },
   {
     "test": "Create Quote",
     "passed": true,
     "details": "Status: 200, Expected: 200",
-    "timestamp": "2026-02-19T12:24:50.191149"
+    "timestamp": "2026-02-20T06:49:48.375925"
   },
   {
     "test": "Quote Creation Data Validation",
     "passed": true,
-    "details": "Quote created with ID: 7026afe5-88c0-4f43-a908-410b337868ce",
-    "timestamp": "2026-02-19T12:24:50.191729"
+    "details": "Quote created with ID: 390b1f5c-65d2-47d2-a5e5-63d3dbcc33e1",
+    "timestamp": "2026-02-20T06:49:48.376537"
   }
 ]
