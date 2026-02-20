@@ -249,7 +249,7 @@ export default function ShopPage() {
 
         <div className="flex gap-8">
           {/* Advanced Sidebar Filters */}
-          <aside className={`${showFilters ? 'fixed inset-0 z-40 bg-black/50 lg:static lg:bg-transparent' : 'hidden'} lg:block w-full lg:w-72 shrink-0`} data-testid="filters-sidebar">
+          <aside className={`${showFilters ? 'fixed inset-0 z-[60] bg-black/50 lg:static lg:bg-transparent' : 'hidden'} lg:block w-full lg:w-72 shrink-0`} data-testid="filters-sidebar">
             <div className={`${showFilters ? 'absolute right-0 top-0 h-full w-80 overflow-y-auto' : ''} bg-white border border-[hsl(214,32%,91%)] rounded-sm p-5 space-y-5 lg:sticky lg:top-28`}>
               {/* Mobile close */}
               {showFilters && (
