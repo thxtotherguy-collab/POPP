@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 
 class PoppPumpsAPITester:
-    def __init__(self, base_url="https://popp-pumps-shop.preview.emergentagent.com"):
+    def __init__(self, base_url="https://pump-catalog-1.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.token = None
@@ -318,7 +318,7 @@ class PoppPumpsAPITester:
 
 def main():
     print("🚀 Starting POPP Pumps API Tests...")
-    print("Testing against: https://popp-pumps-shop.preview.emergentagent.com")
+    print("Testing against: https://pump-catalog-1.preview.emergentagent.com")
     
     tester = PoppPumpsAPITester()
     
