@@ -1,42 +1,29 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import { SlidersHorizontal, X, Search, ChevronDown, ChevronUp, LayoutGrid, List, ArrowUpDown } from 'lucide-react';
-import axios from 'axios';
-import ProductCard from '../components/ProductCard';
-import QuickViewModal from '../components/QuickViewModal';
-import CategoryHeader, { BuyingGuidePanel } from '../components/CategoryHeader';
-import { TrustElements, CategoryFAQ } from '../components/TrustElements';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { SlidersHorizontal, X, Search, ChevronDown, ChevronUp, ArrowUpDown, Package } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Badge } from '../components/ui/badge';
 import { Slider } from '../components/ui/slider';
 import { Separator } from '../components/ui/separator';
+import { Input } from '../components/ui/input';
+import { useCart } from '../contexts/CartContext';
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+// Import the EBARA catalog data
+import catalogData from '../data/ebaraCatalog.json';
 
-const CATEGORY_OPTIONS = [
-  { label: 'All Categories', value: 'all' },
-  { label: 'Booster Pumps', value: 'booster-pumps' },
-  { label: 'Submersible Pumps', value: 'submersible-pumps' },
-  { label: 'Borehole Pumps', value: 'borehole-pumps' },
-  { label: 'Self-Priming Pumps', value: 'self-priming-pumps' },
-  { label: 'Water Tanks', value: 'water-tanks' },
-  { label: 'Accessories', value: 'accessories' },
-];
+const PLACEHOLDER_IMAGE = '/images/pumps/placeholder.svg';
 
+// Sort options
 const SORT_OPTIONS = [
-  { label: 'Name (A-Z)', value: 'name_asc' },
-  { label: 'Name (Z-A)', value: 'name_desc' },
-  { label: 'Price (Low-High)', value: 'price_asc' },
-  { label: 'Price (High-Low)', value: 'price_desc' },
+  { label: 'Price: Low to High', value: 'price_asc' },
+  { label: 'Price: High to Low', value: 'price_desc' },
+  { label: 'Power: Low to High', value: 'power_asc' },
+  { label: 'Power: High to Low', value: 'power_desc' },
+  { label: 'Series: A-Z', value: 'series_asc' },
+  { label: 'Series: Z-A', value: 'series_desc' },
+  { label: 'Name: A-Z', value: 'name_asc' },
 ];
-
-// Parse numeric value from spec string like "0.8 kW" or "80 L/min"
-function parseSpecNum(val) {
-  if (!val) return null;
-  const match = String(val).match(/[\d.]+/);
-  return match ? parseFloat(match[0]) : null;
-}
 
 // Collapsible filter section component
 function FilterSection({ title, defaultOpen = true, children }) {
@@ -56,116 +43,153 @@ function FilterSection({ title, defaultOpen = true, children }) {
   );
 }
 
+// Product Card Component
+function CatalogProductCard({ product }) {
+  const { addItem } = useCart();
+  
+  const formatPrice = (p) => `R${p.toLocaleString('en-ZA', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  
+  // Handle image loading with fallback
+  const [imgSrc, setImgSrc] = useState(`/images/pumps/${product.image}`);
+  const handleImageError = () => setImgSrc(PLACEHOLDER_IMAGE);
+
+  // Convert catalog product to cart format
+  const handleAddToCart = () => {
+    const cartProduct = {
+      id: product.id,
+      name: product.name,
+      brand: product.brand,
+      price: product.price,
+      category: product.category,
+      category_slug: product.category.toLowerCase().replace(/\s+/g, '-'),
+      short_description: product.description,
+      images: [imgSrc],
+      in_stock: true,
+      specs: {
+        power: `${product.power_kw} kW`,
+        series: product.series
+      }
+    };
+    addItem(cartProduct);
+  };
+
+  return (
+    <div className="group relative flex flex-col bg-white border border-[hsl(214,32%,91%)] hover:border-[hsl(214,100%,40%)/0.4] hover:shadow-md transition-all duration-300 rounded-sm overflow-hidden" data-testid={`product-card-${product.id}`}>
+      {/* Stock Badge */}
+      <div className="absolute top-3 left-3 z-10">
+        <Badge className="bg-emerald-500/90 text-white text-[9px] font-semibold rounded-sm">
+          In Stock
+        </Badge>
+      </div>
+
+      {/* Image */}
+      <div className="relative aspect-square bg-[hsl(210,40%,96%)] overflow-hidden">
+        <img
+          src={imgSrc}
+          alt={product.name}
+          className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+          onError={handleImageError}
+        />
+      </div>
+
+      <div className="flex flex-col flex-1 p-4">
+        {/* Brand & SKU */}
+        <div className="flex items-center justify-between mb-1">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-[hsl(215,16%,47%)]">{product.brand}</p>
+          <p className="text-[9px] text-[hsl(215,16%,47%)]">{product.sku}</p>
+        </div>
+        
+        {/* Product Name */}
+        <h3 className="font-manrope font-semibold text-sm text-[hsl(222,47%,11%)] line-clamp-2 mb-1.5">
+          {product.name}
+        </h3>
+        
+        {/* Description */}
+        <p className="text-xs text-[hsl(215,16%,47%)] line-clamp-2 mb-2 flex-1">{product.description}</p>
+
+        {/* Spec Pills */}
+        <div className="flex flex-wrap gap-1 mb-3">
+          <span className="inline-flex px-1.5 py-0.5 bg-[hsl(210,40%,96%)] text-[9px] font-medium text-[hsl(222,47%,11%)] rounded-sm">
+            {product.power_kw} kW
+          </span>
+          <span className="inline-flex px-1.5 py-0.5 bg-[hsl(210,40%,96%)] text-[9px] font-medium text-[hsl(222,47%,11%)] rounded-sm">
+            {product.series}
+          </span>
+          <span className="inline-flex px-1.5 py-0.5 bg-[hsl(214,100%,95%)] text-[9px] font-medium text-[hsl(214,100%,40%)] rounded-sm">
+            {product.category}
+          </span>
+        </div>
+
+        {/* Price + CTA */}
+        <div className="flex items-end justify-between gap-2 mt-auto pt-2 border-t border-[hsl(214,32%,91%)]">
+          <div>
+            <span className="font-manrope font-bold text-lg text-[hsl(222,47%,11%)]">{formatPrice(product.price)}</span>
+            <span className="block text-[9px] text-[hsl(215,16%,47%)]">Incl. VAT</span>
+          </div>
+          <Button
+            size="sm"
+            onClick={handleAddToCart}
+            className="bg-[hsl(214,100%,40%)] hover:bg-[hsl(214,100%,35%)] text-white text-xs rounded-sm h-8 px-3"
+            data-testid={`add-to-cart-${product.id}`}
+          >
+            <Package className="h-3.5 w-3.5 mr-1" /> Add
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ShopPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [products, setProducts] = useState([]);
-  const [brands, setBrands] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
-  const [quickViewProduct, setQuickViewProduct] = useState(null);
-  const [compareIds, setCompareIds] = useState([]);
-  const [priceRange, setPriceRange] = useState([0, 100000]);
-  const [maxPrice, setMaxPrice] = useState(100000);
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+  
+  // Get filter values from URL
+  const selectedCategory = searchParams.get('category') || 'all';
+  const selectedSeries = searchParams.get('series') || 'all';
+  const sort = searchParams.get('sort') || 'price_asc';
+  const minPriceParam = searchParams.get('minPrice');
+  const maxPriceParam = searchParams.get('maxPrice');
+  const minPowerParam = searchParams.get('minPower');
+  const maxPowerParam = searchParams.get('maxPower');
 
-  // Client-side spec filters
-  const [filterPower, setFilterPower] = useState('');
-  const [filterFlow, setFilterFlow] = useState('');
-
-  const category = searchParams.get('category') || 'all';
-  const brand = searchParams.get('brand') || '';
-  const search = searchParams.get('search') || '';
-  const sort = searchParams.get('sort') || 'name_asc';
-
-  const fetchProducts = useCallback(async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (category && category !== 'all') params.set('category', category);
-      if (brand) params.set('brand', brand);
-      if (search) params.set('search', search);
-      params.set('sort', sort);
-      params.set('limit', '50');
-
-      const res = await axios.get(`${API}/products?${params.toString()}`);
-      setProducts(res.data);
-
-      // Calculate max price from data
-      if (res.data.length > 0) {
-        const mp = Math.max(...res.data.map(p => p.price));
-        setMaxPrice(Math.ceil(mp / 1000) * 1000);
-        setPriceRange([0, Math.ceil(mp / 1000) * 1000]);
-      }
-    } catch (err) {
-      console.error('Failed to load products', err);
-    }
-    setLoading(false);
-  }, [category, brand, search, sort]);
-
-  useEffect(() => {
-    fetchProducts();
-    setFilterPower('');
-    setFilterFlow('');
-  }, [fetchProducts]);
-
-  useEffect(() => {
-    axios.get(`${API}/brands`).then(res => setBrands(res.data)).catch(() => {});
+  // Extract unique categories and series from data
+  const categories = useMemo(() => {
+    const cats = [...new Set(catalogData.map(p => p.category))].sort();
+    return ['all', ...cats];
   }, []);
 
-  // Client-side filtering for price range and spec filters
-  const filteredProducts = useMemo(() => {
-    let result = products;
+  const series = useMemo(() => {
+    const seriesList = [...new Set(catalogData.map(p => p.series))].sort();
+    return ['all', ...seriesList];
+  }, []);
 
-    // Price range filter
-    result = result.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
+  // Calculate price and power ranges from data
+  const priceRange = useMemo(() => {
+    const prices = catalogData.map(p => p.price);
+    return { min: Math.min(...prices), max: Math.max(...prices) };
+  }, []);
 
-    // Power filter
-    if (filterPower) {
-      const [min, max] = filterPower.split('-').map(Number);
-      result = result.filter(p => {
-        const pw = parseSpecNum(p.specs?.power || p.specs?.pump_power);
-        if (pw === null) return false;
-        return pw >= min && pw <= max;
-      });
-    }
+  const powerRange = useMemo(() => {
+    const powers = catalogData.map(p => p.power_kw);
+    return { min: Math.min(...powers), max: Math.max(...powers) };
+  }, []);
 
-    // Flow rate filter
-    if (filterFlow) {
-      const [min, max] = filterFlow.split('-').map(Number);
-      result = result.filter(p => {
-        const fl = parseSpecNum(p.specs?.max_flow);
-        if (fl === null) return false;
-        return fl >= min && fl <= max;
-      });
-    }
+  // State for sliders
+  const [priceFilter, setPriceFilter] = useState([
+    minPriceParam ? parseInt(minPriceParam) : priceRange.min,
+    maxPriceParam ? parseInt(maxPriceParam) : priceRange.max
+  ]);
 
-    return result;
-  }, [products, priceRange, filterPower, filterFlow]);
+  const [powerFilter, setPowerFilter] = useState([
+    minPowerParam ? parseFloat(minPowerParam) : powerRange.min,
+    maxPowerParam ? parseFloat(maxPowerParam) : powerRange.max
+  ]);
 
-  // Extract available filter options from current products
-  const availablePowers = useMemo(() => {
-    const powers = products.map(p => parseSpecNum(p.specs?.power || p.specs?.pump_power)).filter(Boolean);
-    if (powers.length === 0) return [];
-    return [
-      { label: 'All Power', value: '' },
-      { label: '0 – 0.5 kW', value: '0-0.5' },
-      { label: '0.5 – 1.0 kW', value: '0.5-1' },
-      { label: '1.0 – 1.5 kW', value: '1-1.5' },
-      { label: '1.5+ kW', value: '1.5-100' },
-    ];
-  }, [products]);
-
-  const availableFlows = useMemo(() => {
-    const flows = products.map(p => parseSpecNum(p.specs?.max_flow)).filter(Boolean);
-    if (flows.length === 0) return [];
-    return [
-      { label: 'All Flow Rates', value: '' },
-      { label: '0 – 50 L/min', value: '0-50' },
-      { label: '50 – 100 L/min', value: '50-100' },
-      { label: '100+ L/min', value: '100-9999' },
-    ];
-  }, [products]);
-
-  const updateFilter = (key, value) => {
+  // Update URL when filters change
+  const updateFilter = useCallback((key, value) => {
     const params = new URLSearchParams(searchParams);
     if (value && value !== 'all') {
       params.set(key, value);
@@ -173,42 +197,152 @@ export default function ShopPage() {
       params.delete(key);
     }
     setSearchParams(params);
-  };
+  }, [searchParams, setSearchParams]);
 
+  // Handle search
+  const handleSearch = useCallback((value) => {
+    setSearchTerm(value);
+    const params = new URLSearchParams(searchParams);
+    if (value) {
+      params.set('search', value);
+    } else {
+      params.delete('search');
+    }
+    setSearchParams(params);
+  }, [searchParams, setSearchParams]);
+
+  // Handle price range change
+  const handlePriceChange = useCallback((value) => {
+    setPriceFilter(value);
+    const params = new URLSearchParams(searchParams);
+    if (value[0] > priceRange.min) {
+      params.set('minPrice', value[0].toString());
+    } else {
+      params.delete('minPrice');
+    }
+    if (value[1] < priceRange.max) {
+      params.set('maxPrice', value[1].toString());
+    } else {
+      params.delete('maxPrice');
+    }
+    setSearchParams(params);
+  }, [searchParams, setSearchParams, priceRange]);
+
+  // Handle power range change
+  const handlePowerChange = useCallback((value) => {
+    setPowerFilter(value);
+    const params = new URLSearchParams(searchParams);
+    if (value[0] > powerRange.min) {
+      params.set('minPower', value[0].toString());
+    } else {
+      params.delete('minPower');
+    }
+    if (value[1] < powerRange.max) {
+      params.set('maxPower', value[1].toString());
+    } else {
+      params.delete('maxPower');
+    }
+    setSearchParams(params);
+  }, [searchParams, setSearchParams, powerRange]);
+
+  // Clear all filters
   const clearFilters = () => {
     setSearchParams({});
-    setFilterPower('');
-    setFilterFlow('');
-    setPriceRange([0, maxPrice]);
+    setSearchTerm('');
+    setPriceFilter([priceRange.min, priceRange.max]);
+    setPowerFilter([powerRange.min, powerRange.max]);
   };
 
-  const toggleCompare = (id) => {
-    setCompareIds(prev =>
-      prev.includes(id) ? prev.filter(x => x !== id) : prev.length < 4 ? [...prev, id] : prev
-    );
-  };
+  // Filter and sort products
+  const filteredProducts = useMemo(() => {
+    let result = [...catalogData];
 
+    // Category filter
+    if (selectedCategory !== 'all') {
+      result = result.filter(p => p.category === selectedCategory);
+    }
+
+    // Series filter
+    if (selectedSeries !== 'all') {
+      result = result.filter(p => p.series === selectedSeries);
+    }
+
+    // Search filter
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(p =>
+        p.name.toLowerCase().includes(term) ||
+        p.series.toLowerCase().includes(term) ||
+        p.category.toLowerCase().includes(term) ||
+        p.sku.toLowerCase().includes(term) ||
+        p.description.toLowerCase().includes(term)
+      );
+    }
+
+    // Price filter
+    result = result.filter(p => p.price >= priceFilter[0] && p.price <= priceFilter[1]);
+
+    // Power filter
+    result = result.filter(p => p.power_kw >= powerFilter[0] && p.power_kw <= powerFilter[1]);
+
+    // Sort
+    switch (sort) {
+      case 'price_asc':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price_desc':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'power_asc':
+        result.sort((a, b) => a.power_kw - b.power_kw);
+        break;
+      case 'power_desc':
+        result.sort((a, b) => b.power_kw - a.power_kw);
+        break;
+      case 'series_asc':
+        result.sort((a, b) => a.series.localeCompare(b.series));
+        break;
+      case 'series_desc':
+        result.sort((a, b) => b.series.localeCompare(a.series));
+        break;
+      case 'name_asc':
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      default:
+        break;
+    }
+
+    return result;
+  }, [selectedCategory, selectedSeries, searchTerm, priceFilter, powerFilter, sort]);
+
+  // Count active filters
   const activeFilterCount = [
-    category !== 'all' && category,
-    brand,
-    search,
-    filterPower,
-    filterFlow,
-    priceRange[0] > 0 || priceRange[1] < maxPrice,
+    selectedCategory !== 'all',
+    selectedSeries !== 'all',
+    searchTerm,
+    priceFilter[0] > priceRange.min || priceFilter[1] < priceRange.max,
+    powerFilter[0] > powerRange.min || powerFilter[1] < powerRange.max,
   ].filter(Boolean).length;
 
   const formatPrice = (p) => `R${p.toLocaleString('en-ZA')}`;
 
   return (
     <div className="min-h-screen bg-[hsl(210,40%,98%)]" data-testid="shop-page">
-      {/* SEO Category Header */}
-      <CategoryHeader categorySlug={category} productCount={filteredProducts.length} />
+      {/* Page Header */}
+      <div className="bg-[hsl(214,100%,15%)] text-white py-12">
+        <div className="max-w-[1400px] mx-auto px-4">
+          <h1 className="font-manrope font-bold text-3xl sm:text-4xl mb-2">EBARA Pump Catalog</h1>
+          <p className="text-gray-300 text-base max-w-2xl">
+            Browse our complete range of EBARA industrial pumps. Filter by category, series, power output, and price to find the perfect pump for your application.
+          </p>
+        </div>
+      </div>
 
       <div className="max-w-[1400px] mx-auto px-4 py-8">
         {/* Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <div className="flex flex-wrap items-center gap-3">
-            {/* Sticky mobile filter trigger */}
+            {/* Mobile filter trigger */}
             <Button
               variant="outline"
               size="sm"
@@ -224,7 +358,7 @@ export default function ShopPage() {
             </Button>
 
             <Select value={sort} onValueChange={(v) => updateFilter('sort', v)}>
-              <SelectTrigger className="w-44 h-9 text-sm rounded-sm" data-testid="sort-select">
+              <SelectTrigger className="w-48 h-9 text-sm rounded-sm" data-testid="sort-select">
                 <ArrowUpDown className="h-3.5 w-3.5 mr-1.5 text-[hsl(215,16%,47%)]" />
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
@@ -243,12 +377,12 @@ export default function ShopPage() {
           </div>
 
           <p className="text-sm text-[hsl(215,16%,47%)]">
-            Showing <span className="font-semibold text-[hsl(222,47%,11%)]">{filteredProducts.length}</span> of {products.length} products
+            Showing <span className="font-semibold text-[hsl(222,47%,11%)]">{filteredProducts.length}</span> of {catalogData.length} products
           </p>
         </div>
 
         <div className="flex gap-8">
-          {/* Advanced Sidebar Filters */}
+          {/* Sidebar Filters */}
           <aside className={`${showFilters ? 'fixed inset-0 z-[60] bg-black/50 lg:static lg:bg-transparent' : 'hidden'} lg:block w-full lg:w-72 shrink-0`} data-testid="filters-sidebar">
             <div className={`${showFilters ? 'absolute right-0 top-0 h-full w-80 overflow-y-auto' : ''} bg-white border border-[hsl(214,32%,91%)] rounded-sm p-5 space-y-5 lg:sticky lg:top-28`}>
               {/* Mobile close */}
@@ -261,18 +395,18 @@ export default function ShopPage() {
                 </div>
               )}
 
-              {/* Search within */}
+              {/* Search */}
               <FilterSection title="Search">
-                <div className="flex border border-[hsl(214,32%,91%)] rounded-sm overflow-hidden">
-                  <input
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(215,16%,47%)]" />
+                  <Input
                     type="text"
                     placeholder="Search products..."
-                    defaultValue={search}
-                    onKeyDown={(e) => { if (e.key === 'Enter') updateFilter('search', e.target.value); }}
-                    className="flex-1 px-3 py-2 text-sm outline-none"
+                    value={searchTerm}
+                    onChange={(e) => handleSearch(e.target.value)}
+                    className="pl-9 h-9 text-sm rounded-sm"
                     data-testid="filter-search-input"
                   />
-                  <span className="px-2 flex items-center text-[hsl(215,16%,47%)]"><Search className="h-4 w-4" /></span>
                 </div>
               </FilterSection>
 
@@ -281,18 +415,18 @@ export default function ShopPage() {
               {/* Category filter */}
               <FilterSection title="Category">
                 <div className="space-y-0.5 max-h-52 overflow-y-auto">
-                  {CATEGORY_OPTIONS.map(opt => (
+                  {categories.map(cat => (
                     <button
-                      key={opt.value}
-                      onClick={() => updateFilter('category', opt.value)}
+                      key={cat}
+                      onClick={() => updateFilter('category', cat)}
                       className={`block w-full text-left px-3 py-1.5 text-sm rounded-sm transition-colors ${
-                        category === opt.value
+                        selectedCategory === cat
                           ? 'bg-[hsl(214,100%,95%)] text-[hsl(214,100%,40%)] font-medium'
                           : 'hover:bg-[hsl(210,40%,96%)] text-[hsl(222,47%,11%)]'
                       }`}
-                      data-testid={`filter-category-${opt.value}`}
+                      data-testid={`filter-category-${cat}`}
                     >
-                      {opt.label}
+                      {cat === 'all' ? 'All Categories' : cat}
                     </button>
                   ))}
                 </div>
@@ -300,30 +434,44 @@ export default function ShopPage() {
 
               <Separator />
 
-              {/* Brand filter */}
-              <FilterSection title="Brand">
-                <div className="space-y-0.5 max-h-44 overflow-y-auto">
-                  <button
-                    onClick={() => updateFilter('brand', '')}
-                    className={`block w-full text-left px-3 py-1.5 text-sm rounded-sm transition-colors ${
-                      !brand ? 'bg-[hsl(214,100%,95%)] text-[hsl(214,100%,40%)] font-medium' : 'hover:bg-[hsl(210,40%,96%)]'
-                    }`}
-                    data-testid="filter-brand-all"
-                  >
-                    All Brands
-                  </button>
-                  {brands.map(b => (
+              {/* Series filter */}
+              <FilterSection title="Series">
+                <div className="space-y-0.5 max-h-52 overflow-y-auto">
+                  {series.map(s => (
                     <button
-                      key={b}
-                      onClick={() => updateFilter('brand', b)}
+                      key={s}
+                      onClick={() => updateFilter('series', s)}
                       className={`block w-full text-left px-3 py-1.5 text-sm rounded-sm transition-colors ${
-                        brand === b ? 'bg-[hsl(214,100%,95%)] text-[hsl(214,100%,40%)] font-medium' : 'hover:bg-[hsl(210,40%,96%)]'
+                        selectedSeries === s
+                          ? 'bg-[hsl(214,100%,95%)] text-[hsl(214,100%,40%)] font-medium'
+                          : 'hover:bg-[hsl(210,40%,96%)] text-[hsl(222,47%,11%)]'
                       }`}
-                      data-testid={`filter-brand-${b}`}
+                      data-testid={`filter-series-${s}`}
                     >
-                      {b}
+                      {s === 'all' ? 'All Series' : s}
                     </button>
                   ))}
+                </div>
+              </FilterSection>
+
+              <Separator />
+
+              {/* Power Range */}
+              <FilterSection title="Power (kW)">
+                <div className="px-1">
+                  <Slider
+                    value={powerFilter}
+                    min={powerRange.min}
+                    max={powerRange.max}
+                    step={0.1}
+                    onValueChange={handlePowerChange}
+                    className="mb-3"
+                    data-testid="power-range-slider"
+                  />
+                  <div className="flex items-center justify-between text-xs text-[hsl(215,16%,47%)]">
+                    <span>{powerFilter[0]} kW</span>
+                    <span>{powerFilter[1]} kW</span>
+                  </div>
                 </div>
               </FilterSection>
 
@@ -333,90 +481,34 @@ export default function ShopPage() {
               <FilterSection title="Price Range">
                 <div className="px-1">
                   <Slider
-                    value={priceRange}
-                    min={0}
-                    max={maxPrice}
+                    value={priceFilter}
+                    min={priceRange.min}
+                    max={priceRange.max}
                     step={500}
-                    onValueChange={setPriceRange}
+                    onValueChange={handlePriceChange}
                     className="mb-3"
                     data-testid="price-range-slider"
                   />
                   <div className="flex items-center justify-between text-xs text-[hsl(215,16%,47%)]">
-                    <span>{formatPrice(priceRange[0])}</span>
-                    <span>{formatPrice(priceRange[1])}</span>
+                    <span>{formatPrice(priceFilter[0])}</span>
+                    <span>{formatPrice(priceFilter[1])}</span>
                   </div>
                 </div>
               </FilterSection>
 
-              {/* Power filter (only show if products have power specs) */}
-              {availablePowers.length > 0 && (
-                <>
-                  <Separator />
-                  <FilterSection title="Power (kW)" defaultOpen={false}>
-                    <div className="space-y-0.5">
-                      {availablePowers.map(opt => (
-                        <button
-                          key={opt.value}
-                          onClick={() => setFilterPower(opt.value)}
-                          className={`block w-full text-left px-3 py-1.5 text-sm rounded-sm transition-colors ${
-                            filterPower === opt.value
-                              ? 'bg-[hsl(214,100%,95%)] text-[hsl(214,100%,40%)] font-medium'
-                              : 'hover:bg-[hsl(210,40%,96%)] text-[hsl(222,47%,11%)]'
-                          }`}
-                          data-testid={`filter-power-${opt.value || 'all'}`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </FilterSection>
-                </>
-              )}
-
-              {/* Flow Rate filter */}
-              {availableFlows.length > 0 && (
-                <>
-                  <Separator />
-                  <FilterSection title="Flow Rate" defaultOpen={false}>
-                    <div className="space-y-0.5">
-                      {availableFlows.map(opt => (
-                        <button
-                          key={opt.value}
-                          onClick={() => setFilterFlow(opt.value)}
-                          className={`block w-full text-left px-3 py-1.5 text-sm rounded-sm transition-colors ${
-                            filterFlow === opt.value
-                              ? 'bg-[hsl(214,100%,95%)] text-[hsl(214,100%,40%)] font-medium'
-                              : 'hover:bg-[hsl(210,40%,96%)] text-[hsl(222,47%,11%)]'
-                          }`}
-                          data-testid={`filter-flow-${opt.value || 'all'}`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </FilterSection>
-                </>
-              )}
-
-              {/* Buying guide panel (in sidebar) */}
-              {category !== 'all' && (
-                <>
-                  <Separator />
-                  <BuyingGuidePanel categorySlug={category} />
-                </>
-              )}
+              {/* Quick Stats */}
+              <Separator />
+              <div className="text-xs text-[hsl(215,16%,47%)] space-y-1">
+                <p><strong>{catalogData.length}</strong> total products</p>
+                <p><strong>{categories.length - 1}</strong> categories</p>
+                <p><strong>{series.length - 1}</strong> series</p>
+              </div>
             </div>
           </aside>
 
-          {/* Product grid */}
+          {/* Product Grid */}
           <div className="flex-1 min-w-0">
-            {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {[1,2,3,4,5,6].map(i => (
-                  <div key={i} className="bg-white animate-pulse rounded-sm h-96 border border-[hsl(214,32%,91%)]" />
-                ))}
-              </div>
-            ) : filteredProducts.length === 0 ? (
+            {filteredProducts.length === 0 ? (
               <div className="text-center py-20 bg-white border border-[hsl(214,32%,91%)] rounded-sm" data-testid="no-products">
                 <Search className="h-12 w-12 text-[hsl(214,32%,91%)] mx-auto mb-4" />
                 <p className="text-lg font-manrope font-semibold text-[hsl(222,47%,11%)] mb-2">No products found</p>
@@ -426,67 +518,30 @@ export default function ShopPage() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" data-testid="product-grid">
                 {filteredProducts.map(product => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    onQuickView={setQuickViewProduct}
-                    compareIds={compareIds}
-                    onToggleCompare={toggleCompare}
-                  />
+                  <CatalogProductCard key={product.id} product={product} />
                 ))}
               </div>
             )}
           </div>
         </div>
 
-        {/* Compare Bar (sticky bottom) */}
-        {compareIds.length > 0 && (
-          <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t-2 border-[hsl(214,100%,40%)] shadow-lg" data-testid="compare-bar">
-            <div className="max-w-[1400px] mx-auto px-4 py-3 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Badge className="bg-[hsl(214,100%,40%)] text-white">{compareIds.length}</Badge>
-                <span className="text-sm font-medium text-[hsl(222,47%,11%)]">product{compareIds.length > 1 ? 's' : ''} selected for comparison</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => setCompareIds([])} className="text-xs" data-testid="clear-compare">
-                  Clear
-                </Button>
-                <Button
-                  size="sm"
-                  className="bg-[hsl(214,100%,40%)] text-white rounded-sm"
-                  onClick={() => {
-                    // Scroll to compare section or open modal
-                    const compareProducts = products.filter(p => compareIds.includes(p.id));
-                    setQuickViewProduct(compareProducts[0]);
-                  }}
-                  data-testid="compare-btn"
-                >
-                  Compare ({compareIds.length})
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Trust Elements */}
-        <div className="mt-12">
-          <TrustElements />
-        </div>
-
-        {/* Category FAQ */}
-        {category !== 'all' && (
-          <div className="mt-12 mb-4">
-            <CategoryFAQ categorySlug={category} />
+        <div className="mt-12 bg-white border border-[hsl(214,32%,91%)] rounded-sm p-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {[
+              { label: 'Quality Guaranteed', sub: 'Genuine EBARA products' },
+              { label: 'SA Wide Delivery', sub: 'Fast & reliable shipping' },
+              { label: 'Expert Support', sub: 'Technical assistance available' },
+              { label: 'Quick Quoting', sub: 'Add to cart for instant quote' },
+            ].map((item, i) => (
+              <div key={i} className="flex flex-col items-center gap-1">
+                <p className="font-manrope font-semibold text-sm text-[hsl(222,47%,11%)]">{item.label}</p>
+                <p className="text-xs text-[hsl(215,16%,47%)]">{item.sub}</p>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
       </div>
-
-      {/* Quick View Modal */}
-      <QuickViewModal
-        product={quickViewProduct}
-        open={!!quickViewProduct}
-        onClose={() => setQuickViewProduct(null)}
-      />
 
       {/* Mobile sticky filter button */}
       <div className="fixed bottom-4 left-4 right-4 z-30 lg:hidden pointer-events-none">
