@@ -72,7 +72,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
               { icon: ShieldCheck, label: 'Quality Guaranteed', sub: 'Trusted brands only' },
-              { icon: Truck, label: 'SA Wide Delivery', sub: 'Fast & reliable shipping' },
+              { icon: Truck, label: 'International and SA', sub: 'Fast & reliable shipping' },
               { icon: Activity, label: 'Expert Advice', sub: 'Free sizing & selection help' },
               { icon: Zap, label: 'Quick Quoting', sub: 'Response within 24 hours' },
             ].map((item, i) => (
