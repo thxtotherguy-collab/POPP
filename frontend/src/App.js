@@ -1,5 +1,6 @@
 import "@/App.css";
 import "@/index.css";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -16,12 +17,77 @@ import CartPage from "./pages/CartPage";
 import AuthPage from "./pages/AuthPage";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
+import { X, Construction } from "lucide-react";
+
+// Under Construction Notice Popup
+function UnderConstructionNotice() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Check if user has already dismissed the notice in this session
+    const dismissed = sessionStorage.getItem('constructionNoticeDismissed');
+    if (!dismissed) {
+      setIsVisible(true);
+    }
+  }, []);
+
+  const handleDismiss = () => {
+    setIsVisible(false);
+    sessionStorage.setItem('constructionNoticeDismissed', 'true');
+  };
+
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="relative bg-white rounded-lg shadow-2xl max-w-md w-full p-6 animate-in zoom-in-95 duration-300">
+        {/* Close button */}
+        <button
+          onClick={handleDismiss}
+          className="absolute top-3 right-3 p-1 text-gray-400 hover:text-gray-600 transition-colors"
+          aria-label="Close notice"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        {/* Icon */}
+        <div className="flex justify-center mb-4">
+          <div className="w-16 h-16 bg-[hsl(45,93%,47%)]/10 rounded-full flex items-center justify-center">
+            <Construction className="h-8 w-8 text-[hsl(45,93%,47%)]" />
+          </div>
+        </div>
+
+        {/* Content */}
+        <h2 className="text-xl font-manrope font-bold text-center text-[hsl(222,47%,11%)] mb-2">
+          Website Under Construction
+        </h2>
+        <p className="text-center text-[hsl(215,16%,47%)] mb-6">
+          We're currently updating our website to serve you better. Some features may be limited during this time. Thank you for your patience!
+        </p>
+
+        {/* Button */}
+        <button
+          onClick={handleDismiss}
+          className="w-full py-3 px-4 bg-[hsl(214,100%,40%)] hover:bg-[hsl(214,100%,35%)] text-white font-semibold rounded-sm transition-colors"
+        >
+          Continue to Website
+        </button>
+
+        {/* Footer note */}
+        <p className="text-center text-xs text-[hsl(215,16%,47%)] mt-4">
+          For urgent enquiries, please contact us directly.
+        </p>
+      </div>
+    </div>
+  );
+}
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <CartProvider>
+          <UnderConstructionNotice />
           <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-1 pt-[calc(2rem+64px)]">
