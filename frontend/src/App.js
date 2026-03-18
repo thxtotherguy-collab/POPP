@@ -1,7 +1,7 @@
 import "@/App.css";
 import "@/index.css";
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
@@ -18,6 +18,17 @@ import AuthPage from "./pages/AuthPage";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
 import { X, Construction } from "lucide-react";
+
+// Scroll to top on route change
+function ScrollToTop() {
+  const { pathname, search } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname, search]);
+
+  return null;
+}
 
 // Under Construction Notice Popup
 function UnderConstructionNotice() {
@@ -85,6 +96,7 @@ function UnderConstructionNotice() {
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AuthProvider>
         <CartProvider>
           <UnderConstructionNotice />
