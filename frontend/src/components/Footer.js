@@ -29,9 +29,9 @@ export default function Footer() {
               Pump & Tank Co — your trusted source for water pumps, storage tanks, and accessories. Serving South Africa with expert advice and competitive pricing.
             </p>
             <div className="space-y-2 text-sm text-gray-400">
-              <div className="flex items-center gap-2"><Phone className="h-4 w-4" /> +27 (0) 21 555 1234</div>
+              <div className="flex items-center gap-2"><Phone className="h-4 w-4" /> +27 68 377 3507</div>
               <div className="flex items-center gap-2"><Mail className="h-4 w-4" /> info@popp.co.za</div>
-              <div className="flex items-center gap-2"><MapPin className="h-4 w-4" /> Cape Town, South Africa</div>
+              <div className="flex items-center gap-2"><MapPin className="h-4 w-4" /> Johannesburg, South Africa</div>
             </div>
           </div>
 

@@ -42,7 +42,7 @@ export default function AboutPage() {
             {[
               { icon: ShieldCheck, title: 'Trusted Brands', desc: 'We stock only reputable brands like DAB, Grundfos, Zilmet, JoJo, and Pascali. Every product is backed by manufacturer warranties and our own quality guarantee.' },
               { icon: Users, title: 'Expert Advice', desc: 'Not sure what you need? Our team provides free sizing and selection advice. Use our Pump Finder tool or request a system consultation for personalised recommendations.' },
-              { icon: Truck, title: 'SA Wide Delivery', desc: 'We deliver across South Africa. Whether you are in Cape Town, Johannesburg, Durban, or a rural farm — we will get your equipment to you quickly and safely.' },
+              { icon: Truck, title: 'International Delivery', desc: 'We deliver across South Africa and internationally. Whether you are in Johannesburg, Cape Town, Durban, or overseas — we will get your equipment to you quickly and safely.' },
             ].map((item, i) => (
               <div key={i} className="text-center">
                 <div className="w-16 h-16 bg-[hsl(214,100%,95%)] rounded-sm flex items-center justify-center mx-auto mb-5">

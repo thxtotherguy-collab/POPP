@@ -27,7 +27,7 @@ const CATEGORY_SEO = {
     ],
     relatedCategories: ['submersible-pumps', 'water-tanks', 'accessories'],
     metaTitle: 'Booster Pumps South Africa | Pressure Pumps for Home & Business | POPP',
-    metaDescription: 'Shop quality booster pumps from DAB, Grundfos & Zilmet. Inverter-driven systems for constant water pressure. Free sizing advice. SA wide delivery.',
+    metaDescription: 'Shop quality booster pumps from DAB, Grundfos & Zilmet. Inverter-driven systems for constant water pressure. Free sizing advice. International delivery.',
   },
 
   'submersible-pumps': {
@@ -179,7 +179,7 @@ CATEGORY_SEO['all'] = {
   faq: [],
   relatedCategories: ['booster-pumps', 'submersible-pumps', 'borehole-pumps', 'water-tanks'],
   metaTitle: 'Water Pumps & Tanks South Africa | POPP Pump & Tank Co',
-  metaDescription: 'Shop pumps, tanks & accessories from trusted brands. DAB, Grundfos, Zilmet, JoJo. Expert advice and SA wide delivery from POPP.',
+  metaDescription: 'Shop pumps, tanks & accessories from trusted brands. DAB, Grundfos, Zilmet, JoJo. Expert advice and international delivery from POPP.',
 };
 
 export default CATEGORY_SEO;

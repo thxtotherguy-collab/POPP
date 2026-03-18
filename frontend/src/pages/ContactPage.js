@@ -40,9 +40,9 @@ export default function ContactPage() {
           {/* Contact info */}
           <div className="space-y-6">
             {[
-              { icon: Phone, label: 'Phone', value: '+27 (0) 21 555 1234', sub: 'Mon-Fri, 8am-5pm SAST' },
+              { icon: Phone, label: 'Phone', value: '+27 68 377 3507', sub: 'Mon-Fri, 8am-5pm SAST' },
               { icon: Mail, label: 'Email', value: 'info@popp.co.za', sub: 'Response within 24 hours' },
-              { icon: MapPin, label: 'Location', value: 'Cape Town, South Africa', sub: 'SA wide delivery' },
+              { icon: MapPin, label: 'Location', value: 'Johannesburg, South Africa', sub: 'International delivery' },
             ].map((item, i) => (
               <div key={i} className="bg-white border border-[hsl(214,32%,91%)] rounded-sm p-5 flex gap-4">
                 <div className="w-10 h-10 bg-[hsl(214,100%,95%)] rounded-sm flex items-center justify-center shrink-0">

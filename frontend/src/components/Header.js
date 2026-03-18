@@ -56,7 +56,7 @@ export default function Header() {
       <div className="bg-[hsl(214,100%,40%)] text-white text-xs py-1.5">
         <div className="max-w-[1400px] mx-auto px-4 flex items-center justify-between">
           <span>Supply &bull; Advice &bull; Quotes</span>
-          <span className="hidden sm:inline">Free quote requests &bull; SA wide delivery</span>
+          <span className="hidden sm:inline">Free quote requests &bull; International delivery</span>
         </div>
       </div>
 

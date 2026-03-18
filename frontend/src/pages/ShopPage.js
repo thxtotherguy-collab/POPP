@@ -605,7 +605,7 @@ export default function ShopPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
               { label: 'Quality Guaranteed', sub: 'Genuine EBARA products' },
-              { label: 'International and SA', sub: 'Fast & reliable shipping' },
+              { label: 'International Delivery', sub: 'Fast & reliable shipping' },
               { label: 'Expert Support', sub: 'Technical assistance available' },
               { label: 'Quick Quoting', sub: 'Add to cart for instant quote' },
             ].map((item, i) => (

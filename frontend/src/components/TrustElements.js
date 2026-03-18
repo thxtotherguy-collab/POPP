@@ -9,7 +9,7 @@ export function TrustElements() {
     <div className="bg-white border border-[hsl(214,32%,91%)] rounded-sm" data-testid="trust-elements">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[hsl(214,32%,91%)]">
         {[
-          { icon: Truck, title: 'SA Wide Delivery', desc: 'Reliable shipping to all major centres and rural areas across South Africa' },
+          { icon: Truck, title: 'International Delivery', desc: 'Reliable shipping to all major centres across South Africa and internationally' },
           { icon: ShieldCheck, title: 'Warranty Included', desc: 'All products carry full manufacturer warranty — 2 to 8 years depending on brand' },
           { icon: RotateCcw, title: 'Easy Returns', desc: 'Hassle-free returns within 14 days on unused, undamaged products' },
           { icon: MessageCircle, title: 'Need Help Choosing?', desc: 'Our team provides free sizing advice — send your requirements via email or WhatsApp', isAction: true },
