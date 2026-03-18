@@ -38,12 +38,16 @@ export default function Header() {
   ];
 
   const categories = [
-    { label: 'Booster Pumps', slug: 'booster-pumps' },
-    { label: 'Submersible Pumps', slug: 'submersible-pumps' },
-    { label: 'Borehole Pumps', slug: 'borehole-pumps' },
-    { label: 'Self-Priming Pumps', slug: 'self-priming-pumps' },
-    { label: 'Water Tanks', slug: 'water-tanks' },
-    { label: 'Accessories', slug: 'accessories' },
+    { label: 'Borehole Pump', slug: 'Borehole Pump' },
+    { label: 'Centrifugal Pump', slug: 'Centrifugal Pump' },
+    { label: 'Submersible Pump', slug: 'Submersible Pump' },
+    { label: 'Vertical Multistage Pump', slug: 'Vertical Multistage Pump' },
+    { label: 'End Suction Pump', slug: 'End Suction Pump' },
+    { label: 'Stainless Steel Pump', slug: 'Stainless Steel Pump' },
+    { label: 'Self-Priming Pump', slug: 'Self-Priming Pump' },
+    { label: 'Twin Impeller Pump', slug: 'Twin Impeller Pump' },
+    { label: 'Fountain Pump', slug: 'Fountain Pump' },
+    { label: 'Drainage Pump', slug: 'Drainage Pump' },
   ];
 
   return (
