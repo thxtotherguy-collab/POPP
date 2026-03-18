@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SlidersHorizontal, X, Search, ChevronDown, ChevronUp, ArrowUpDown, Package } from 'lucide-react';
+import { SlidersHorizontal, X, Search, ChevronDown, ChevronUp, ArrowUpDown, Package, Zap } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Badge } from '../components/ui/badge';
@@ -43,9 +43,48 @@ function FilterSection({ title, defaultOpen = true, children }) {
   );
 }
 
+// Voltage Toggle Component
+function VoltageToggle({ selected, onChange }) {
+  return (
+    <div className="inline-flex items-center bg-[hsl(210,40%,96%)] rounded-sm p-0.5">
+      <button
+        onClick={() => onChange('220V')}
+        className={`px-2 py-1 text-[10px] font-semibold rounded-sm transition-all ${
+          selected === '220V'
+            ? 'bg-[hsl(45,93%,47%)] text-[hsl(222,47%,11%)] shadow-sm'
+            : 'text-[hsl(215,16%,47%)] hover:text-[hsl(222,47%,11%)]'
+        }`}
+        data-testid="voltage-toggle-220v"
+      >
+        220V
+      </button>
+      <button
+        onClick={() => onChange('380V')}
+        className={`px-2 py-1 text-[10px] font-semibold rounded-sm transition-all ${
+          selected === '380V'
+            ? 'bg-[hsl(214,100%,40%)] text-white shadow-sm'
+            : 'text-[hsl(215,16%,47%)] hover:text-[hsl(222,47%,11%)]'
+        }`}
+        data-testid="voltage-toggle-380v"
+      >
+        380V
+      </button>
+    </div>
+  );
+}
+
 // Product Card Component
 function CatalogProductCard({ product }) {
   const { addItem } = useCart();
+  const [selectedVoltage, setSelectedVoltage] = useState('220V');
+  
+  // Determine which price to show
+  const displayPrice = useMemo(() => {
+    if (product.has_dual_voltage) {
+      return selectedVoltage === '220V' ? product.price_220v : product.price_380v;
+    }
+    return product.price;
+  }, [product, selectedVoltage]);
   
   const formatPrice = (p) => `R${p.toLocaleString('en-ZA', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   
@@ -56,10 +95,10 @@ function CatalogProductCard({ product }) {
   // Convert catalog product to cart format
   const handleAddToCart = () => {
     const cartProduct = {
-      id: product.id,
-      name: product.name,
+      id: product.has_dual_voltage ? `${product.id}-${selectedVoltage}` : product.id,
+      name: product.has_dual_voltage ? `${product.name} (${selectedVoltage})` : product.name,
       brand: product.brand,
-      price: product.price,
+      price: displayPrice,
       category: product.category,
       category_slug: product.category.toLowerCase().replace(/\s+/g, '-'),
       short_description: product.description,
@@ -67,7 +106,8 @@ function CatalogProductCard({ product }) {
       in_stock: true,
       specs: {
         power: `${product.power_kw} kW`,
-        series: product.series
+        series: product.series,
+        ...(product.has_dual_voltage && { voltage: selectedVoltage })
       }
     };
     addItem(cartProduct);
@@ -81,6 +121,15 @@ function CatalogProductCard({ product }) {
           In Stock
         </Badge>
       </div>
+
+      {/* Dual Voltage Badge */}
+      {product.has_dual_voltage && (
+        <div className="absolute top-3 right-3 z-10">
+          <Badge className="bg-[hsl(214,100%,40%)] text-white text-[9px] font-semibold rounded-sm flex items-center gap-1">
+            <Zap className="h-2.5 w-2.5" /> Dual Voltage
+          </Badge>
+        </div>
+      )}
 
       {/* Image */}
       <div className="relative aspect-square bg-[hsl(210,40%,96%)] overflow-hidden">
@@ -110,9 +159,11 @@ function CatalogProductCard({ product }) {
 
         {/* Spec Pills */}
         <div className="flex flex-wrap gap-1 mb-3">
-          <span className="inline-flex px-1.5 py-0.5 bg-[hsl(210,40%,96%)] text-[9px] font-medium text-[hsl(222,47%,11%)] rounded-sm">
-            {product.power_kw} kW
-          </span>
+          {product.power_kw > 0 && (
+            <span className="inline-flex px-1.5 py-0.5 bg-[hsl(210,40%,96%)] text-[9px] font-medium text-[hsl(222,47%,11%)] rounded-sm">
+              {product.power_kw} kW
+            </span>
+          )}
           <span className="inline-flex px-1.5 py-0.5 bg-[hsl(210,40%,96%)] text-[9px] font-medium text-[hsl(222,47%,11%)] rounded-sm">
             {product.series}
           </span>
@@ -121,11 +172,20 @@ function CatalogProductCard({ product }) {
           </span>
         </div>
 
+        {/* Voltage Toggle (if dual voltage) */}
+        {product.has_dual_voltage && (
+          <div className="mb-3">
+            <VoltageToggle selected={selectedVoltage} onChange={setSelectedVoltage} />
+          </div>
+        )}
+
         {/* Price + CTA */}
         <div className="flex items-end justify-between gap-2 mt-auto pt-2 border-t border-[hsl(214,32%,91%)]">
           <div>
-            <span className="font-manrope font-bold text-lg text-[hsl(222,47%,11%)]">{formatPrice(product.price)}</span>
-            <span className="block text-[9px] text-[hsl(215,16%,47%)]">Incl. VAT</span>
+            <span className="font-manrope font-bold text-lg text-[hsl(222,47%,11%)]">{formatPrice(displayPrice)}</span>
+            <span className="block text-[9px] text-[hsl(215,16%,47%)]">
+              {product.has_dual_voltage ? `${selectedVoltage} • Incl. VAT` : 'Incl. VAT'}
+            </span>
           </div>
           <Button
             size="sm"
@@ -173,7 +233,7 @@ export default function ShopPage() {
   }, []);
 
   const powerRange = useMemo(() => {
-    const powers = catalogData.map(p => p.power_kw);
+    const powers = catalogData.filter(p => p.power_kw > 0).map(p => p.power_kw);
     return { min: Math.min(...powers), max: Math.max(...powers) };
   }, []);
 
@@ -282,8 +342,8 @@ export default function ShopPage() {
     // Price filter
     result = result.filter(p => p.price >= priceFilter[0] && p.price <= priceFilter[1]);
 
-    // Power filter
-    result = result.filter(p => p.power_kw >= powerFilter[0] && p.power_kw <= powerFilter[1]);
+    // Power filter (only for products with power > 0)
+    result = result.filter(p => p.power_kw === 0 || (p.power_kw >= powerFilter[0] && p.power_kw <= powerFilter[1]));
 
     // Sort
     switch (sort) {
@@ -326,6 +386,9 @@ export default function ShopPage() {
 
   const formatPrice = (p) => `R${p.toLocaleString('en-ZA')}`;
 
+  // Count dual voltage products
+  const dualVoltageCount = useMemo(() => catalogData.filter(p => p.has_dual_voltage).length, []);
+
   return (
     <div className="min-h-screen bg-[hsl(210,40%,98%)]" data-testid="shop-page">
       {/* Page Header */}
@@ -335,6 +398,14 @@ export default function ShopPage() {
           <p className="text-gray-300 text-base max-w-2xl">
             Browse our complete range of EBARA industrial pumps. Filter by category, series, power output, and price to find the perfect pump for your application.
           </p>
+          <div className="flex items-center gap-4 mt-3 text-sm text-gray-400">
+            <span>{catalogData.length} products</span>
+            <span>•</span>
+            <span className="flex items-center gap-1">
+              <Zap className="h-3.5 w-3.5 text-yellow-400" />
+              {dualVoltageCount} with dual voltage (220V/380V)
+            </span>
+          </div>
         </div>
       </div>
 
@@ -502,6 +573,10 @@ export default function ShopPage() {
                 <p><strong>{catalogData.length}</strong> total products</p>
                 <p><strong>{categories.length - 1}</strong> categories</p>
                 <p><strong>{series.length - 1}</strong> series</p>
+                <p className="flex items-center gap-1">
+                  <Zap className="h-3 w-3 text-yellow-500" />
+                  <strong>{dualVoltageCount}</strong> dual voltage options
+                </p>
               </div>
             </div>
           </aside>
