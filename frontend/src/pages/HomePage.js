@@ -10,10 +10,10 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const HERO_IMG = 'https://images.unsplash.com/photo-1575507770554-1d097efa18d7?w=1600&q=80';
 
 const categoryData = [
-  { name: 'Booster Pumps', slug: 'booster-pumps', icon: Zap, desc: 'Home & commercial pressure systems' },
-  { name: 'Submersible Pumps', slug: 'submersible-pumps', icon: Droplets, desc: 'Wells, boreholes & drainage' },
-  { name: 'Borehole Pumps', slug: 'borehole-pumps', icon: Activity, desc: 'Deep well pump solutions' },
-  { name: 'Water Tanks', slug: 'water-tanks', icon: Container, desc: 'Storage & rainwater harvesting' },
+  { name: 'Booster Pumps', slug: 'Vertical Multistage Pump', icon: Zap, desc: 'Home & commercial pressure systems' },
+  { name: 'Submersible Pumps', slug: 'Submersible Pump', icon: Droplets, desc: 'Wells, boreholes & drainage' },
+  { name: 'Borehole Pumps', slug: 'Borehole Pump', icon: Activity, desc: 'Deep well pump solutions' },
+  { name: 'Water Tanks', slug: 'Stainless Steel Pump', icon: Container, desc: 'Stainless steel pump solutions' },
 ];
 
 export default function HomePage() {
