@@ -11,8 +11,9 @@ import { useCart } from '../contexts/CartContext';
 
 // Import the EBARA catalog data
 import catalogData from '../data/ebaraCatalog.json';
+import { handleProductImageError, resolveProductImage } from '../data/catalogProducts';
 
-const PLACEHOLDER_IMAGE = '/images/pumps/placeholder.svg';
+const PRODUCTS_PER_PAGE = 24;
 
 // Sort options
 const SORT_OPTIONS = [
@@ -88,9 +89,7 @@ function CatalogProductCard({ product }) {
   
   const formatPrice = (p) => `R${p.toLocaleString('en-ZA', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   
-  // Handle image loading with fallback
-  const [imgSrc, setImgSrc] = useState(`/images/pumps/${product.image}`);
-  const handleImageError = () => setImgSrc(PLACEHOLDER_IMAGE);
+  const imgSrc = resolveProductImage(product.image);
 
   // Convert catalog product to cart format
   const handleAddToCart = () => {
@@ -140,7 +139,7 @@ function CatalogProductCard({ product }) {
           alt={product.name}
           className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
-          onError={handleImageError}
+          onError={handleProductImageError}
         />
       </Link>
 
@@ -207,6 +206,7 @@ export default function ShopPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showFilters, setShowFilters] = useState(false);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+  const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
   
   // Get filter values from URL
   const selectedCategory = searchParams.get('category') || 'all';
@@ -377,6 +377,12 @@ export default function ShopPage() {
     return result;
   }, [selectedCategory, selectedSeries, searchTerm, priceFilter, powerFilter, sort]);
 
+  useEffect(() => {
+    setVisibleCount(PRODUCTS_PER_PAGE);
+  }, [selectedCategory, selectedSeries, searchTerm, priceFilter, powerFilter, sort]);
+
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
+
   // Count active filters
   const activeFilterCount = [
     selectedCategory !== 'all',
@@ -450,7 +456,7 @@ export default function ShopPage() {
           </div>
 
           <p className="text-sm text-[hsl(215,16%,47%)]">
-            Showing <span className="font-semibold text-[hsl(222,47%,11%)]">{filteredProducts.length}</span> of {catalogData.length} products
+            Showing <span className="font-semibold text-[hsl(222,47%,11%)]">{visibleProducts.length}</span> of {filteredProducts.length} products
           </p>
         </div>
 
@@ -593,11 +599,25 @@ export default function ShopPage() {
                 <Button onClick={clearFilters} variant="outline" className="rounded-sm">Clear All Filters</Button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" data-testid="product-grid">
-                {filteredProducts.map(product => (
-                  <CatalogProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" data-testid="product-grid">
+                  {visibleProducts.map(product => (
+                    <CatalogProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+                {visibleCount < filteredProducts.length && (
+                  <div className="mt-8 text-center">
+                    <Button
+                      onClick={() => setVisibleCount(count => count + PRODUCTS_PER_PAGE)}
+                      variant="outline"
+                      className="h-11 px-8 rounded-sm border-[hsl(211,70%,39%)] text-[hsl(211,70%,39%)] hover:bg-[hsl(211,70%,94%)]"
+                      data-testid="load-more-products"
+                    >
+                      Load More
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

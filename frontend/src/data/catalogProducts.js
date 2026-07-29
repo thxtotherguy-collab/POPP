@@ -1,10 +1,49 @@
 import catalogData from './ebaraCatalog.json';
 
-const PLACEHOLDER_IMAGE = '/images/pumps/placeholder.svg';
+export const PLACEHOLDER_IMAGE = '/images/pumps/placeholder.svg';
+
+export function resolveProductImage(image) {
+  if (typeof image !== 'string' || !image.trim()) {
+    return PLACEHOLDER_IMAGE;
+  }
+
+  const normalizedPath = image.trim().replace(/\\/g, '/');
+  const filename = normalizedPath.split('/').pop();
+
+  if (!filename) {
+    return PLACEHOLDER_IMAGE;
+  }
+
+  let decodedFilename = filename;
+  try {
+    decodedFilename = decodeURIComponent(filename);
+  } catch {
+    decodedFilename = filename;
+  }
+
+  return `/images/pumps/${encodeURIComponent(decodedFilename)}`;
+}
+
+export function handleProductImageError(event) {
+  const imageElement = event.currentTarget;
+  if (!imageElement) return;
+
+  const currentSource = imageElement.getAttribute('src') || '';
+  if (
+    currentSource.endsWith(PLACEHOLDER_IMAGE) ||
+    imageElement.dataset.fallbackApplied === 'true'
+  ) {
+    return;
+  }
+
+  imageElement.dataset.fallbackApplied = 'true';
+  imageElement.src = PLACEHOLDER_IMAGE;
+}
 
 export function toStoreProduct(product) {
   if (!product) return null;
 
+  const imagePath = resolveProductImage(product.image);
   const specs = {
     ...(product.power_kw > 0 && { power: `${product.power_kw} kW` }),
     series: product.series,
@@ -15,8 +54,8 @@ export function toStoreProduct(product) {
     slug: product.id,
     category_slug: product.category,
     short_description: product.description,
-    images: [`/images/pumps/${product.image}`],
-    image: `/images/pumps/${product.image}`,
+    images: [imagePath],
+    image_path: imagePath,
     in_stock: true,
     specs,
     tags: [product.series, product.category].filter(Boolean),
@@ -40,5 +79,3 @@ export function getRelatedCatalogProducts(product, limit = 4) {
     )
     .slice(0, limit);
 }
-
-export { PLACEHOLDER_IMAGE };

@@ -6,7 +6,12 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import ProductCard from '../components/ProductCard';
-import { findCatalogProduct, getRelatedCatalogProducts } from '../data/catalogProducts';
+import {
+  findCatalogProduct,
+  getRelatedCatalogProducts,
+  handleProductImageError,
+  resolveProductImage,
+} from '../data/catalogProducts';
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -15,6 +20,7 @@ export default function ProductPage() {
   const [qty, setQty] = useState(1);
   const product = useMemo(() => findCatalogProduct(id), [id]);
   const related = useMemo(() => getRelatedCatalogProducts(product), [product]);
+  const productImage = resolveProductImage(product?.image);
 
   useEffect(() => {
     setQty(1);
@@ -58,9 +64,10 @@ export default function ProductPage() {
               data-testid="product-image"
             >
               <img
-                src={product.images?.[0] || 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800'}
+                src={productImage}
                 alt={product.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500"
+                onError={handleProductImageError}
               />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/10">
                 <ZoomIn className="h-8 w-8 text-white" />
@@ -162,9 +169,10 @@ export default function ProductPage() {
             <X className="h-8 w-8" />
           </button>
           <img
-            src={product.images?.[0] || 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1200'}
+            src={productImage}
             alt={product.name}
             className="max-w-full max-h-[90vh] object-contain"
+            onError={handleProductImageError}
           />
         </div>
       )}

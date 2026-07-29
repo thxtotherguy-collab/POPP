@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
-const LOGO_SRC = '/images/brand/swsg-logo-vector.webp';
+const LOGO_SRC = '/images/brand/swsg-logo.png';
 
 export default function Header() {
   const { totalItems } = useCart();
@@ -67,7 +67,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 sm:h-24 gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 shrink-0" data-testid="logo-link" aria-label="SWSG Home">
-            <img src={LOGO_SRC} alt="Southern Water Solutions Group" className="h-12 sm:h-20 w-auto object-contain" />
+            <img src={LOGO_SRC} alt="Southern Water Solutions Group" className="h-14 sm:h-20 lg:h-24 w-auto object-contain" />
             <span className="sr-only">SWSG — Southern Water Solutions Group</span>
           </Link>
 
@@ -156,7 +156,7 @@ export default function Header() {
               <SheetContent side="right" className="w-80">
                 <SheetHeader>
                   <SheetTitle className="flex items-center gap-2">
-                    <img src={LOGO_SRC} alt="SWSG" className="h-14 w-auto object-contain" />
+                    <img src={LOGO_SRC} alt="SWSG" className="h-16 w-auto object-contain" />
                     <span className="sr-only">SWSG</span>
                   </SheetTitle>
                 </SheetHeader>

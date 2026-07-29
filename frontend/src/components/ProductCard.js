@@ -3,6 +3,7 @@ import { ShoppingCart, Eye, Check } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { handleProductImageError, resolveProductImage } from '../data/catalogProducts';
 
 export default function ProductCard({ product, onQuickView, compareIds, onToggleCompare }) {
   const { addItem } = useCart();
@@ -10,6 +11,7 @@ export default function ProductCard({ product, onQuickView, compareIds, onToggle
   const hasDiscount = product.original_price && product.original_price > product.price;
   const discountPct = hasDiscount ? Math.round((1 - product.price / product.original_price) * 100) : 0;
   const isCompared = compareIds?.includes(product.id);
+  const productImage = product.images?.[0] || resolveProductImage(product.image);
 
   const formatPrice = (p) => `R${p.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
@@ -72,10 +74,11 @@ export default function ProductCard({ product, onQuickView, compareIds, onToggle
       {/* Image */}
       <Link to={`/product/${product.id}`} className="relative aspect-square bg-[hsl(210,40%,96%)] overflow-hidden">
         <img
-          src={product.images?.[0] || 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400'}
+          src={productImage}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
+          onError={handleProductImageError}
         />
       </Link>
 
